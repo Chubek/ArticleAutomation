@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 import requests
 
 driver = "{ODBC Driver 17 for SQL Server}"
-server = "tcp:marketing-server-chubak.database.windows.net"
-database = "marketing_scraped_data"
+server = "tcp:chubak-sql.database.windows.net,1433"
+database = "marketing_scrape"
 username = "chubak"
 password = "LAsvegas11"
 
@@ -14,21 +14,21 @@ connection_string = 'DRIVER={driver};PORT=1433;SERVER={server};DATABASE={databas
 cnxn = pyodbc.connect(connection_string)
 cursor = cnxn.cursor()
 
-# cursor.execute("CREATE TABLE LushaCompanies("
-#    "CompanyName varchar(400),"
-#    "CompanyInfo text,"
-#      "CompanyUrl varchar(255),"
-#      "CompanyLogoUrl varchar(300),"
-#       "CompanySite varchar(255),"
-#        "CompanyFounded varchar(255),"
-#         "CompanyEmployees varchar(255),"
-#        "CompanyLeadNames text,"
-#         "CompanyTwitter varchar(255),"
-#         "CompanyLinkedIn varchar(255),"
-#        "CompanyFacebok varchar(255),"
-#         "CompanyPermutationTypes text,"
-#         "CompanyPermutationExamples text,"
-#       "CompanyPermutationPercentages text)")
+cursor.execute("CREATE TABLE LushaCompanies("
+               "CompanyName varchar(400),"
+               "CompanyInfo text,"
+               "CompanyUrl varchar(255),"
+               "CompanyLogoUrl varchar(300),"
+               "CompanySite varchar(255),"
+               "CompanyFounded varchar(255),"
+               "CompanyEmployees varchar(255),"
+               "CompanyLeadNames text,"
+               "CompanyTwitter varchar(255),"
+               "CompanyLinkedIn varchar(255),"
+               "CompanyFacebok varchar(255),"
+               "CompanyPermutationTypes text,"
+               "CompanyPermutationExamples text,"
+               "CompanyPermutationPercentages text)")
 
 
 url_file = open('url_file.txt', 'r')
@@ -39,14 +39,14 @@ lam = lambda x: "'" + x + "'"
 
 for i, url in enumerate(urls):
     print(f"Checking url {url}; {i} of {len(urls)}")
-    for i in range(20):
+    for j in range(20):
         try:
             req = None
             try:
                 req = requests.get(url)
             except:
                 print("Url GET failed.")
-            finally:
+            else:
                 print("Url get success")
 
             soup = BeautifulSoup(req.content, 'html.parser')
@@ -57,7 +57,7 @@ for i, url in enumerate(urls):
                 company_name = soup.h1.get_text()
             except:
                 print("Company name scrape failed. No company name.")
-            finally:
+            else:
                 print("Name get success")
 
             leads = []
@@ -76,7 +76,7 @@ for i, url in enumerate(urls):
                 lead_names = ",".join(leads)
             except:
                 print("No leads.")
-            finally:
+            else:
                 print("Leads get success")
 
             site = ""
@@ -85,7 +85,7 @@ for i, url in enumerate(urls):
                 site = soup.find('div', {'class': 'link'}).h2.a['href']
             except:
                 print("No site")
-            finally:
+            else:
                 print("Site get success")
 
             founded = ""
@@ -100,7 +100,7 @@ for i, url in enumerate(urls):
             except:
                 print("No founded or employees")
 
-            finally:
+            else:
                 print("employee/founded get success")
 
             facebook_link = ""
@@ -111,23 +111,22 @@ for i, url in enumerate(urls):
                 facebook_link = soup.find('a', {'class': 'facebook'})['href']
             except:
                 print("No Facebook")
-            finally:
+            else:
                 print("Facebook get success")
 
             try:
                 linkedin_link = soup.find('a', {'class': 'linkedin'})['href']
             except:
                 print("No LinkedIn")
-            finally:
+            else:
                 print("Linkedin get success")
 
             try:
                 twitter_link = soup.find('a', {'class': 'twitter'})['href']
             except:
                 print("No Twitter")
-            finally:
+            else:
                 print("Twitter get success")
-
 
             perm_data = []
 
@@ -146,7 +145,7 @@ for i, url in enumerate(urls):
                     perm_data.append([ele for ele in cols if ele])
             except:
                 print("No perm data")
-            finally:
+            else:
                 print("Perm get success")
 
             perm_data_type = []
@@ -164,7 +163,7 @@ for i, url in enumerate(urls):
                 perm_data_percent_str = ",".join(perm_data_percent)
             except:
                 print("Problem with joining")
-            finally:
+            else:
                 print("joining success")
 
             company_logo = ""
@@ -173,7 +172,7 @@ for i, url in enumerate(urls):
                 company_logo = soup.find('strong', {'class': 'company-logo'}).img['src']
             except:
                 print("No company logo")
-            finally:
+            else:
                 print("Logo get success")
 
             company_info = ""
@@ -182,7 +181,7 @@ for i, url in enumerate(urls):
                 company_info = soup.find('div', {'class': 'company-info'}).p.get_text()
             except:
                 print("No company info")
-            finally:
+            else:
                 print("Info get success")
 
             try:
@@ -217,7 +216,7 @@ for i, url in enumerate(urls):
 
             except:
                 print("Insert failed.")
-            finally:
+            else:
                 print("Insert successful.")
 
 
