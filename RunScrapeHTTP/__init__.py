@@ -7,9 +7,8 @@ import os
 
 
 def run_scrape():
-    
     logging.info("Function started")
-    
+
     driver = "{ODBC Driver 17 for SQL Server}"
     server = "tcp:chubak-sql.database.windows.net,1433"
     database = "marketing_scrape"
@@ -21,11 +20,11 @@ def run_scrape():
 
     cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
-    
+
     logging.info("Connection made")
 
     try:
-    
+
         cursor.execute("""CREATE TABLE LushaCompaniesScraping(
                    CompanyName text,
                    CompanyInfo text,
@@ -48,11 +47,43 @@ def run_scrape():
     else:
         logging.info("Table created.")
 
+    cursor.execute("""INSERT INTO LushaCompaniesScraping(
+                        CompanyName,
+                         CompanyInfo,
+                         CompanyUrl,
+                         CompanyLogoUrl,
+                         CompanySite,
+                         CompanyFounded, 
+                         CompanyEmployees, 
+                         CompanyLeadNames,
+                         CompanyTwitter, 
+                         CompanyLinkedIn, 
+                         CompanyFacebok, 
+                         CompanyPermutationTypes, 
+                         CompanyPermutationExamples, 
+                         CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                          ?, ?, ?) """, ("test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test",
+                                         "test"))
+
+    cnxn.commit()
+
     current_path = "/home/site/wwwroot"
     url_file = open(os.path.join(current_path, 'url_file.txt'), 'r')
-    
+
     logging.info(f"File {url_file.name} loaded.")
-    
+
     urls = [url.strip() for url in url_file.readlines()]
 
     lam = lambda x: "'" + x + "'"
@@ -204,7 +235,6 @@ def run_scrape():
                 else:
                     logging.info("Info get success")
 
-
                 cursor.execute("""INSERT INTO LushaCompaniesScraping(
                     CompanyName,
                      CompanyInfo,
@@ -266,13 +296,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request "
-             "body for a personalized response.",
-             status_code=200
+            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request "
+            "body for a personalized response.",
+            status_code=200
         )
-
-
-
-
-
-
