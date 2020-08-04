@@ -26,18 +26,18 @@ def run_scrape():
 
     try:
     
-        cursor.execute("""CREATE TABLE LushaCompaniesScrape(
-                   CompanyName nvarchar(400),
+        cursor.execute("""CREATE TABLE LushaCompaniesScraping(
+                   CompanyName text,
                    CompanyInfo text,
-                   CompanyUrl nvarchar(255),
-                   CompanyLogoUrl nvarchar(300),
-                   CompanySite nvarchar(255),
-                   CompanyFounded nvarchar(255),
-                   CompanyEmployees nvarchar(255),
+                   CompanyUrl text,
+                   CompanyLogoUrl text,
+                   CompanySite text,
+                   CompanyFounded text,
+                   CompanyEmployees text,
                    CompanyLeadNames text,
-                   CompanyTwitter nvarchar(255),
-                   CompanyLinkedIn nvarchar(255),
-                   CompanyFacebook nvarchar(255),
+                   CompanyTwitter text,
+                   CompanyLinkedIn text,
+                   CompanyFacebook text,
                    CompanyPermutationTypes text,
                    CompanyPermutationExamples text,
                    CompanyPermutationPercentages text)""")
@@ -45,8 +45,8 @@ def run_scrape():
         cnxn.commit()
     except:
         logging.info("Table already exists.")
-
-    logging.info("Table created.")
+    else:
+        logging.info("Table created.")
 
     current_path = "/home/site/wwwroot"
     url_file = open(os.path.join(current_path, 'url_file.txt'), 'r')
@@ -204,8 +204,8 @@ def run_scrape():
                 else:
                     logging.info("Info get success")
 
-                try:
-                    cursor.execute("""INSERT INTO LushaCompaniesScrape(
+
+                cursor.execute("""INSERT INTO LushaCompaniesScrape(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -235,11 +235,8 @@ def run_scrape():
                                      perm_data_ex_str,
                                      perm_data_percent_str))
 
-                    cnxn.commit()
-                except:
-                    logging.info("Insert failed.")
-                else:
-                    logging.info("Insert successful.")
+                cnxn.commit()
+
 
 
             except:
