@@ -36,7 +36,7 @@ def run_scrape():
                    "CompanyPermutationExamples text,"
                    "CompanyPermutationPercentages text)")
 
-    current_path = os.getcwd()
+    current_path = "/home/site/wwwroot"
     url_file = open(os.path.join(current_path, '../url_file.txt'), 'r')
 
     urls = [url.strip() for url in url_file.readlines()]
