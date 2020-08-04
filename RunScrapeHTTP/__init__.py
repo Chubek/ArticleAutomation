@@ -23,8 +23,10 @@ def run_scrape():
     cursor = cnxn.cursor()
     
     logging.info("Connection made")
+
+    try:
     
-    cursor.execute("""CREATE TABLE LushaCompanies(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrape(
                    CompanyName nvarchar(400),
                    CompanyInfo text,
                    CompanyUrl nvarchar(255),
@@ -40,7 +42,9 @@ def run_scrape():
                    CompanyPermutationExamples text,
                    CompanyPermutationPercentages text)""")
 
-    cnxn.commit()
+        cnxn.commit()
+    except:
+        logging.info("Table already exists.")
 
     logging.info("Table created.")
 
@@ -201,14 +205,34 @@ def run_scrape():
                     logging.info("Info get success")
 
                 try:
-                    cursor.execute("""INSERT INTO LushaCompanies(CompanyName, CompanyInfo,
-                    CompanyUrl, CompanyLogoUrl, CompanySite, CompanyFounded, CompanyEmployees, CompanyLeadNames,
-                    CompanyTwitter, CompanyLinkedIn, CompanyFacebok, CompanyPermutationTypes, 
-                     CompanyPermutationExamples, CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                      ?, ?, ?) """, (company_name, company_info, url, company_logo,
-                                     site, founded, employees, lead_names,
-                                     twitter_link, linkedin_link, facebook_link,
-                                     perm_data_type_str, perm_data_ex_str,
+                    cursor.execute("""INSERT INTO LushaCompaniesScrape(
+                    CompanyName,
+                     CompanyInfo,
+                     CompanyUrl,
+                     CompanyLogoUrl,
+                     CompanySite,
+                     CompanyFounded, 
+                     CompanyEmployees, 
+                     CompanyLeadNames,
+                     CompanyTwitter, 
+                     CompanyLinkedIn, 
+                     CompanyFacebok, 
+                     CompanyPermutationTypes, 
+                     CompanyPermutationExamples, 
+                     CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                      ?, ?, ?) """, (company_name,
+                                     company_info,
+                                     url,
+                                     company_logo,
+                                     site,
+                                     founded,
+                                     employees,
+                                     lead_names,
+                                     twitter_link,
+                                     linkedin_link,
+                                     facebook_link,
+                                     perm_data_type_str,
+                                     perm_data_ex_str,
                                      perm_data_percent_str))
 
                     cnxn.commit()
