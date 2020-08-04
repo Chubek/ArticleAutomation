@@ -7,11 +7,11 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
 
 
 RUN apt-get update && \
- apt-get -y install sudo\
+ apt-get install sudo -y \
  && sudo apt-get install unixodbc -y \
  && sudo apt-get install unixodbc-dev -y \
- && sudo apt-get install curl -y\
- && sudo apt-get install poppler-utils -y\
+ && sudo apt-get install curl -y \
+ && sudo apt-get install poppler-utils -y \
  && apt-get install --reinstall build-essential -y
 
 RUN sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
