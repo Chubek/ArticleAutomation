@@ -3,7 +3,7 @@ import pyodbc
 from bs4 import BeautifulSoup
 import requests
 import azure.functions as func
-
+import os
 
 def run_scrape():
     driver = "{ODBC Driver 17 for SQL Server}"
@@ -34,7 +34,8 @@ def run_scrape():
                    "CompanyPermutationExamples text,"
                    "CompanyPermutationPercentages text)")
 
-    url_file = open('url_file.txt', 'r')
+    current_path = os.getcwd()
+    url_file = open(os.path.join(current_path, 'url_file.txt'), 'r')
 
     urls = [url.strip() for url in url_file.readlines()]
 
