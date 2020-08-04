@@ -7,12 +7,13 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
 
 
 RUN apt-get update && \
-  apt-get -y install sudo
+ apt-get -y install sudo\
+ && sudo apt-get install unixodbc -y \
+ && sudo apt-get install unixodbc-dev -y \
+ && sudo apt-get install curl -y\
+ && sudo apt-get install poppler-utils -y\
+ && apt-get install --reinstall build-essential -y
 
-RUN sudo apt-get -y install poppler-utils
-
-RUN apt-get -y install curl
-RUN apt-get -y install --reinstall build-essential
 RUN sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN sudo curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
 RUN sudo ACCEPT_EULA=Y apt-get install msodbcsql17
