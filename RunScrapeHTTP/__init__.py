@@ -6,13 +6,13 @@ import azure.functions as func
 
 
 def run_scrape():
-    driver = "{FreeTDS}"
+    driver = "{ODBC Driver 17 for SQL Server}"
     server = "tcp:chubak-sql.database.windows.net,1433"
     database = "marketing_scrape"
     username = "chubak"
     password = "LAsvegas11"
 
-    connection_string = 'DRIVER={driver};PORT=1433;SERVER={server};DATABASE={database};UID={username};PWD={password}' \
+    connection_string = 'DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}' \
         .format(driver=driver, server=server, database=database, username=username, password=password)
 
     cnxn = pyodbc.connect(connection_string)
@@ -34,7 +34,7 @@ def run_scrape():
                    "CompanyPermutationExamples text,"
                    "CompanyPermutationPercentages text)")
 
-    url_file = open('../url_file.txt', 'r')
+    url_file = open('url_file.txt', 'r')
 
     urls = [url.strip() for url in url_file.readlines()]
 
