@@ -205,7 +205,7 @@ def run_scrape():
                     logging.info("Info get success")
 
 
-                cursor.execute("""INSERT INTO LushaCompaniesScrape(
+                cursor.execute("""INSERT INTO LushaCompaniesScraping(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
