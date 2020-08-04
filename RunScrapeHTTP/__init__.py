@@ -5,7 +5,11 @@ import requests
 import azure.functions as func
 import os
 
+
 def run_scrape():
+    
+    logging.info("Function started")
+    
     driver = "{ODBC Driver 17 for SQL Server}"
     server = "tcp:chubak-sql.database.windows.net,1433"
     database = "marketing_scrape"
@@ -17,41 +21,49 @@ def run_scrape():
 
     cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
+    
+    logging.info("Connection made")
+    
+    cursor.execute("""CREATE TABLE LushaCompanies(
+                   CompanyName nvarchar(400),
+                   CompanyInfo text,
+                   CompanyUrl nvarchar(255),
+                   CompanyLogoUrl nvarchar(300),
+                   CompanySite nvarchar(255),
+                   CompanyFounded nvarchar(255),
+                   CompanyEmployees nvarchar(255),
+                   CompanyLeadNames text,
+                   CompanyTwitter nvarchar(255),
+                   CompanyLinkedIn nvarchar(255),
+                   CompanyFacebook nvarchar(255),
+                   CompanyPermutationTypes text,
+                   CompanyPermutationExamples text,
+                   CompanyPermutationPercentages text)""")
 
-    cursor.execute("CREATE TABLE LushaCompanies("
-                   "CompanyName varchar(400),"
-                   "CompanyInfo text,"
-                   "CompanyUrl varchar(255),"
-                   "CompanyLogoUrl varchar(300),"
-                   "CompanySite varchar(255),"
-                   "CompanyFounded varchar(255),"
-                   "CompanyEmployees varchar(255),"
-                   "CompanyLeadNames text,"
-                   "CompanyTwitter varchar(255),"
-                   "CompanyLinkedIn varchar(255),"
-                   "CompanyFacebok varchar(255),"
-                   "CompanyPermutationTypes text,"
-                   "CompanyPermutationExamples text,"
-                   "CompanyPermutationPercentages text)")
+    cnxn.commit()
+
+    logging.info("Table created.")
 
     current_path = "/home/site/wwwroot"
     url_file = open(os.path.join(current_path, 'url_file.txt'), 'r')
-
+    
+    logging.info(f"File {url_file.name} loaded.")
+    
     urls = [url.strip() for url in url_file.readlines()]
 
     lam = lambda x: "'" + x + "'"
 
     for i, url in enumerate(urls):
-        print(f"Checking url {url}; {i} of {len(urls)}")
+        logging.info(f"Checking url {url}; {i} of {len(urls)}")
         for j in range(20):
             try:
                 req = None
                 try:
                     req = requests.get(url)
                 except:
-                    print("Url GET failed.")
+                    logging.info("Url GET failed.")
                 else:
-                    print("Url get success")
+                    logging.info("Url get success")
 
                 soup = BeautifulSoup(req.content, 'html.parser')
 
@@ -60,9 +72,9 @@ def run_scrape():
                 try:
                     company_name = soup.h1.get_text()
                 except:
-                    print("Company name scrape failed. No company name.")
+                    logging.info("Company name scrape failed. No company name.")
                 else:
-                    print("Name get success")
+                    logging.info("Name get success")
 
                 leads = []
                 lead_names = ""
@@ -79,18 +91,18 @@ def run_scrape():
                                 continue
                     lead_names = ",".join(leads)
                 except:
-                    print("No leads.")
+                    logging.info("No leads.")
                 else:
-                    print("Leads get success")
+                    logging.info("Leads get success")
 
                 site = ""
 
                 try:
                     site = soup.find('div', {'class': 'link'}).h2.a['href']
                 except:
-                    print("No site")
+                    logging.info("No site")
                 else:
-                    print("Site get success")
+                    logging.info("Site get success")
 
                 founded = ""
                 employees = ""
@@ -102,10 +114,10 @@ def run_scrape():
                     employees = details[1].get_text()
 
                 except:
-                    print("No founded or employees")
+                    logging.info("No founded or employees")
 
                 else:
-                    print("employee/founded get success")
+                    logging.info("employee/founded get success")
 
                 facebook_link = ""
                 linkedin_link = ""
@@ -114,23 +126,23 @@ def run_scrape():
                 try:
                     facebook_link = soup.find('a', {'class': 'facebook'})['href']
                 except:
-                    print("No Facebook")
+                    logging.info("No Facebook")
                 else:
-                    print("Facebook get success")
+                    logging.info("Facebook get success")
 
                 try:
                     linkedin_link = soup.find('a', {'class': 'linkedin'})['href']
                 except:
-                    print("No LinkedIn")
+                    logging.info("No LinkedIn")
                 else:
-                    print("Linkedin get success")
+                    logging.info("Linkedin get success")
 
                 try:
                     twitter_link = soup.find('a', {'class': 'twitter'})['href']
                 except:
-                    print("No Twitter")
+                    logging.info("No Twitter")
                 else:
-                    print("Twitter get success")
+                    logging.info("Twitter get success")
 
                 perm_data = []
 
@@ -148,9 +160,9 @@ def run_scrape():
                         cols = [ele.text.strip() for ele in cols]
                         perm_data.append([ele for ele in cols if ele])
                 except:
-                    print("No perm data")
+                    logging.info("No perm data")
                 else:
-                    print("Perm get success")
+                    logging.info("Perm get success")
 
                 perm_data_type = []
                 perm_data_ex = []
@@ -166,77 +178,60 @@ def run_scrape():
                     perm_data_ex_str = ",".join(perm_data_ex)
                     perm_data_percent_str = ",".join(perm_data_percent)
                 except:
-                    print("Problem with joining")
+                    logging.info("Problem with joining")
                 else:
-                    print("joining success")
+                    logging.info("joining success")
 
                 company_logo = ""
 
                 try:
                     company_logo = soup.find('strong', {'class': 'company-logo'}).img['src']
                 except:
-                    print("No company logo")
+                    logging.info("No company logo")
                 else:
-                    print("Logo get success")
+                    logging.info("Logo get success")
 
                 company_info = ""
 
                 try:
                     company_info = soup.find('div', {'class': 'company-info'}).p.get_text()
                 except:
-                    print("No company info")
+                    logging.info("No company info")
                 else:
-                    print("Info get success")
+                    logging.info("Info get success")
 
                 try:
+                    cursor.execute("""INSERT INTO LushaCompanies(CompanyName, CompanyInfo,
+                    CompanyUrl, CompanyLogoUrl, CompanySite, CompanyFounded, CompanyEmployees, CompanyLeadNames,
+                    CompanyTwitter, CompanyLinkedIn, CompanyFacebok, CompanyPermutationTypes, 
+                     CompanyPermutationExamples, CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                      ?, ?, ?) """, (company_name, company_info, url, company_logo,
+                                     site, founded, employees, lead_names,
+                                     twitter_link, linkedin_link, facebook_link,
+                                     perm_data_type_str, perm_data_ex_str,
+                                     perm_data_percent_str))
 
-                    sql = f"INSERT INTO LushaCompanies ([CompanyName]," \
-                          "[CompanyInfo]," \
-                          "[CompanyUrl])," \
-                          "[CompanySite]," \
-                          "[CompanyFounded]," \
-                          "[CompanyEmployees]," \
-                          "[CompanyLeadNames]," \
-                          "[CompanyTwitter]," \
-                          "[CompanyLinkedIn]," \
-                          "[CompanyFacebok]," \
-                          "[CompanyPermutationTypes]," \
-                          "[CompanyPermutationExamples]," \
-                          "[CompanyPermutationPercentages] VALUES (lam(company_name)}," \
-                          " {lam(company_info)}, " \
-                          "{lam(url)}, " \
-                          "{lam(site)}," \
-                          " {lam(founded)}," \
-                          " {lam(employees)}," \
-                          " {lam(lead_names)}," \
-                          " {lam(twitter_link)}, " \
-                          "{lam(linkedin_link)}," \
-                          " {lam(facebook_link)}," \
-                          " {lam(perm_data_type_str)}," \
-                          " {lam(perm_data_ex_str)}, " \
-                          "{lam(perm_data_percent_str)});"
-
-                    cursor.execute(sql)
-
+                    cnxn.commit()
                 except:
-                    print("Insert failed.")
+                    logging.info("Insert failed.")
                 else:
-                    print("Insert successful.")
+                    logging.info("Insert successful.")
 
 
             except:
-                print("The whole thing failed. Retrying...")
+                logging.info("The whole thing failed. Retrying...")
                 continue
             else:
                 break
             finally:
-                print("Everything success")
+                logging.info("Everything success")
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     name = req.params.get('name')
+    logging.info("Running the function...")
     run_scrape()
     if not name:
         try:
@@ -250,6 +245,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
+             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request "
+             "body for a personalized response.",
              status_code=200
         )
+
+
+
+
+
+
