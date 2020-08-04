@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 import requests
 import azure.functions as func
 import os
+import gspread
+from google.oauth2.service_account import Credentials
 
 def run_scrape():
     driver = "{ODBC Driver 17 for SQL Server}"
@@ -35,7 +37,7 @@ def run_scrape():
                    "CompanyPermutationPercentages text)")
 
     current_path = os.getcwd()
-    url_file = open(os.path.join(current_path, 'url_file.txt'), 'r')
+    url_file = open(os.path.join(current_path, '../url_file.txt'), 'r')
 
     urls = [url.strip() for url in url_file.readlines()]
 
