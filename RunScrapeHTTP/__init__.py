@@ -4,8 +4,10 @@ from bs4 import BeautifulSoup
 import requests
 import azure.functions as func
 from azure.durable_functions import DurableOrchestrationClient
-import  azure.durable_functions as df
+import azure.durable_functions as df
 import os
+import typing
+import json
 
 
 def run_scrape():
@@ -248,14 +250,30 @@ def run_scrape():
         else:
             logging.info("Insert successful")
 
-
-def orchestrator_function(context: df.DurableOrchestrationContext):
-    logging.info("Calling function")
-    context.call_activity("Run Scrape", run_scrape())
-    print("Done!")
+    return "Done"
 
 
-main = df.Orchestrator.create(orchestrator_function)
+class SerializableClass(object):
+
+    def __init__(self, number: int):
+        self.number = run_scrape()
+
+    @staticmethod
+    def to_json(obj: object) -> str:
+        return str(obj.number)
+
+    @staticmethod
+    def from_json(json_str: str) -> object:
+        number = int(json_str)
+        obj = SerializableClass(number)
+        return obj
 
 
+async def main(req: func.HttpRequest, starter: str, message):
 
+    function_name = req.route_params.get('functionName')
+    logging.info(starter)
+    client = DurableOrchestrationClient(starter)
+    instance_id = await client.start_new(function_name, client_input=SerializableClass(5))
+    response = client.create_check_status_response(req, instance_id)
+    message.set(response)
