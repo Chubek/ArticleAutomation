@@ -248,9 +248,8 @@ def run_scrape():
             print("Insert successful")
 
 
-def orchestrator_function(context: df.DurableOrchestrationContext):
-    result = yield context.call_activity("F1", run_scrape)
-    return result
-
-
-main = df.Orchestrator.create(orchestrator_function)
+async def main(req: func.HttpRequest, starter: str, instance_id: str) -> func.HttpResponse:
+    client = df.DurableOrchestrationClient(starter)
+    logging.info("Running function")
+    await run_scrape()
+    return func.HttpResponse("Done!")
