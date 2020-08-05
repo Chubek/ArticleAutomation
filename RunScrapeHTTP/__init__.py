@@ -28,7 +28,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScrapedDurable(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapedView(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -214,7 +214,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScrapedDurable(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapedView(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -256,7 +256,7 @@ def run_scrape():
 class SerializableClass(object):
 
     def __init__(self, number: int):
-        self.number = run_scrape()
+        self.number = number
 
     @staticmethod
     def to_json(obj: object) -> str:
@@ -277,3 +277,6 @@ async def main(req: func.HttpRequest, starter: str, message):
     instance_id = await client.start_new(function_name, client_input=SerializableClass(5))
     response = client.create_check_status_response(req, instance_id)
     message.set(response)
+    logging.info("Running the function")
+    res = await run_scrape()
+    logging.info(res)
