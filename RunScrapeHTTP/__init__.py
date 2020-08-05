@@ -72,11 +72,11 @@ def run_scrape():
         try:
             soup = BeautifulSoup(req.content, 'html.parser')
         except:
-            print("Problem parsing.")
+            logging.warning("Problem parsing.")
         else:
-            print("Parsing complete.")
+            logging.info("Parsing complete.")
 
-            company_name = ""
+        company_name = ""
 
         try:
             company_name = soup.h1.get_text()
@@ -243,13 +243,13 @@ def run_scrape():
 
             cnxn.commit()
         except:
-            print("Insert failed.")
+            logging.info("Insert failed.")
         else:
-            print("Insert successful")
+            logging.info("Insert successful")
 
 
-async def main(req: func.HttpRequest, starter: str, instance_id: str) -> func.HttpResponse:
-    client = df.DurableOrchestrationClient(starter)
-    logging.info("Running function")
-    await run_scrape()
-    return func.HttpResponse("Done!")
+def main():
+    logging.warning("Activity Triggered")
+    logging.info("Function run started")
+    run_scrape()
+    logging.info("Function run ended")

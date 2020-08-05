@@ -2,21 +2,10 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "msg",
-      "type": "queueTrigger",
+      "name": "name",
+      "type": "activityTrigger",
       "direction": "in",
-      "queueName": "messages",
-      "connection": "AzureStorageQueuesConnectionString"
-    },
-    {
-      "name": "$return",
-      "type": "http",
-      "direction": "out"
-    },
-    {
-      "name": "starter",
-      "type": "durableClient",
-      "direction": "in"
+      "datatype": "string"
     }
   ],
   "disabled": false
