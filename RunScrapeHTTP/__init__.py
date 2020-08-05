@@ -253,30 +253,7 @@ def run_scrape():
     return "Done"
 
 
-class SerializableClass(object):
-
-    def __init__(self, number: int):
-        self.number = number
-
-    @staticmethod
-    def to_json(obj: object) -> str:
-        return str(obj.number)
-
-    @staticmethod
-    def from_json(json_str: str) -> object:
-        number = int(json_str)
-        obj = SerializableClass(number)
-        return obj
-
-
 async def main(req: func.HttpRequest, starter: str, message):
-
     function_name = req.route_params.get('functionName')
-    logging.info(starter)
-    client = DurableOrchestrationClient(starter)
-    instance_id = await client.start_new(function_name, client_input=SerializableClass(5))
-    response = client.create_check_status_response(req, instance_id)
-    message.set(response)
-    logging.info("Running the function")
-    res = await run_scrape()
+    res = yield df.DurableOrchestrationContext.call_activity_with_retry(name=function_name, input_=run_scrape)
     logging.info(res)
