@@ -21,42 +21,10 @@ def run_scrape():
     cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
 
-    cursor.execute("""INSERT INTO LushaCompaniesScraping(
-                        CompanyName,
-                         CompanyInfo,
-                         CompanyUrl,
-                         CompanyLogoUrl,
-                         CompanySite,
-                         CompanyFounded, 
-                         CompanyEmployees, 
-                         CompanyLeadNames,
-                         CompanyTwitter, 
-                         CompanyLinkedIn, 
-                         CompanyFacebook, 
-                         CompanyPermutationTypes, 
-                         CompanyPermutationExamples, 
-                         CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                          ?, ?, ?) """, ("gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
-                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh"))
-
-    cnxn.commit()
-
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScraping(
+        cursor.execute("""CREATE TABLE LushaCompaniesScraped(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -242,7 +210,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScraping(
+            cursor.execute("""INSERT INTO LushaCompaniesScraped(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
