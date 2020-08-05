@@ -21,10 +21,41 @@ def run_scrape():
     cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
 
+    cursor.execute("""INSERT INTO LushaCompaniesScraping(
+                        CompanyName,
+                         CompanyInfo,
+                         CompanyUrl,
+                         CompanyLogoUrl,
+                         CompanySite,
+                         CompanyFounded, 
+                         CompanyEmployees, 
+                         CompanyLeadNames,
+                         CompanyTwitter, 
+                         CompanyLinkedIn, 
+                         CompanyFacebook, 
+                         CompanyPermutationTypes, 
+                         CompanyPermutationExamples, 
+                         CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                          ?, ?, ?) """, ("gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh",
+                                         "gdfgsdytsetysetuyshstghstuyhstuystuysethyusetuyhsdtuyhsuyhstuysetuyhstyh"))
+
+    cnxn.commit()
+
     logging.info("Connection made")
 
     try:
-
         cursor.execute("""CREATE TABLE LushaCompaniesScraping(
                    CompanyName text,
                    CompanyInfo text,
@@ -58,160 +89,160 @@ def run_scrape():
 
     for i, url in enumerate(urls):
         logging.info(f"Checking url {url} {i} of {len(urls)}")
-        for j in range(20):
-            try:
-                req = None
-                try:
-                    req = requests.get(url)
-                except:
-                    logging.info("Url GET failed.")
-                else:
-                    logging.info(f"Url {url} get success")
 
-                soup = None
+        try:
+            req = requests.get(url)
+        except:
+            logging.info("Url GET failed.")
+            continue
+        else:
+            logging.info(f"Url {url} get success")
 
-                try:
-                    soup = BeautifulSoup(req.content, 'html.parser')
-                except:
-                    print("Problem parsing.")
-                else:
-                    print("Parsing complete.")
+        soup = None
 
-                company_name = ""
+        try:
+            soup = BeautifulSoup(req.content, 'html.parser')
+        except:
+            print("Problem parsing.")
+        else:
+            print("Parsing complete.")
 
-                try:
-                    company_name = soup.h1.get_text()
-                except:
-                    logging.info("Company name scrape failed. No company name.")
-                else:
-                    logging.info("Name get success")
+            company_name = ""
 
-                leads = []
-                lead_names = ""
+        try:
+            company_name = soup.h1.get_text()
+        except:
+            logging.info("Company name scrape failed. No company name.")
+        else:
+            logging.info("Name get success")
 
-                try:
-                    lead_soup = soup.find_all("ul", {"class": "searches-list t"})
+        leads = []
+        lead_names = ""
 
-                    for lead in lead_soup:
-                        lis = lead.find_all('li')
-                        for li in lis:
-                            try:
-                                leads.append(f"{li.a.span.get_text()} | {li.a['href']}")
-                            except:
-                                continue
-                    lead_names = ",".join(leads)
-                except:
-                    logging.info("No leads.")
-                else:
-                    logging.info("Leads get success")
+        try:
+            lead_soup = soup.find_all("ul", {"class": "searches-list t"})
 
-                site = ""
+            for lead in lead_soup:
+                lis = lead.find_all('li')
+                for li in lis:
+                    try:
+                        leads.append(f"{li.a.span.get_text()} | {li.a['href']}")
+                    except:
+                        continue
 
-                try:
-                    site = soup.find('div', {'class': 'link'}).h2.a['href']
-                except:
-                    logging.info("No site")
-                else:
-                    logging.info("Site get success")
+            lead_names = ",".join(leads)
+        except:
+            logging.info("No leads.")
+        else:
+            logging.info("Leads get success")
 
-                founded = ""
-                employees = ""
+            site = ""
 
-                try:
-                    details = soup.find('dl', {'class': 'company-details'}).find_all('dd')
+        try:
+            site = soup.find('div', {'class': 'link'}).h2.a['href']
+        except:
+            logging.info("No site")
+        else:
+            logging.info("Site get success")
 
-                    founded = details[0].get_text()
-                    employees = details[1].get_text()
+        founded = ""
+        employees = ""
 
-                except:
-                    logging.info("No founded or employees")
+        try:
+            details = soup.find('dl', {'class': 'company-details'}).find_all('dd')
 
-                else:
-                    logging.info("employee/founded get success")
+            founded = details[0].get_text()
+            employees = details[1].get_text()
 
-                facebook_link = ""
-                linkedin_link = ""
-                twitter_link = ""
+        except:
+            logging.info("No founded or employees")
 
-                try:
-                    facebook_link = soup.find('a', {'class': 'facebook'})['href']
-                except:
-                    logging.info("No Facebook")
-                else:
-                    logging.info("Facebook get success")
+        else:
+            logging.info("employee/founded get success")
 
-                try:
-                    linkedin_link = soup.find('a', {'class': 'linkedin'})['href']
-                except:
-                    logging.info("No LinkedIn")
-                else:
-                    logging.info("Linkedin get success")
+        facebook_link = ""
+        linkedin_link = ""
+        twitter_link = ""
 
-                try:
-                    twitter_link = soup.find('a', {'class': 'twitter'})['href']
-                except:
-                    logging.info("No Twitter")
-                else:
-                    logging.info("Twitter get success")
+        try:
+            facebook_link = soup.find('a', {'class': 'facebook'})['href']
+        except:
+            logging.info("No Facebook")
+        else:
+            logging.info("Facebook get success")
 
-                perm_data = []
+        try:
+            linkedin_link = soup.find('a', {'class': 'linkedin'})['href']
+        except:
+            logging.info("No LinkedIn")
+        else:
+            logging.info("Linkedin get success")
 
-                perm_data_type_str = ""
-                perm_data_ex_str = ""
-                perm_data_percent_str = ""
+        try:
+            twitter_link = soup.find('a', {'class': 'twitter'})['href']
+        except:
+            logging.info("No Twitter")
+        else:
+            logging.info("Twitter get success")
 
-                try:
-                    table = soup.find('table')
-                    table_body = table.find('tbody')
+        perm_data = []
 
-                    rows = table_body.find_all('tr')
-                    for row in rows:
-                        cols = row.find_all('td')
-                        cols = [ele.text.strip() for ele in cols]
-                        perm_data.append([ele for ele in cols if ele])
-                except:
-                    logging.info("No perm data")
-                else:
-                    logging.info("Perm get success")
+        perm_data_type_str = ""
+        perm_data_ex_str = ""
+        perm_data_percent_str = ""
 
-                perm_data_type = []
-                perm_data_ex = []
-                perm_data_percent = []
+        try:
+            table = soup.find('table')
+            table_body = table.find('tbody')
 
-                for perm_datum in perm_data:
-                    perm_data_type.append(perm_datum[0])
-                    perm_data_ex.append(perm_datum[1])
-                    perm_data_percent.append(perm_datum[2])
+            rows = table_body.find_all('tr')
+            for row in rows:
+                cols = row.find_all('td')
+                cols = [ele.text.strip() for ele in cols]
+                perm_data.append([ele for ele in cols if ele])
+        except:
+            logging.info("No perm data")
+        else:
+            logging.info("Perm get success")
 
-                try:
-                    perm_data_type_str = ",".join(perm_data_type)
-                    perm_data_ex_str = ",".join(perm_data_ex)
-                    perm_data_percent_str = ",".join(perm_data_percent)
-                except:
-                    logging.info("Problem with joining")
-                else:
-                    logging.info("joining success")
+        perm_data_type = []
+        perm_data_ex = []
+        perm_data_percent = []
 
-                company_logo = ""
+        for perm_datum in perm_data:
+            perm_data_type.append(perm_datum[0])
+            perm_data_ex.append(perm_datum[1])
+            perm_data_percent.append(perm_datum[2])
 
-                try:
-                    company_logo = soup.find('strong', {'class': 'company-logo'}).img['src']
-                except:
-                    logging.info("No company logo")
-                else:
-                    logging.info("Logo get success")
+        try:
+            perm_data_type_str = ",".join(perm_data_type)
+            perm_data_ex_str = ",".join(perm_data_ex)
+            perm_data_percent_str = ",".join(perm_data_percent)
+        except:
+            logging.info("Problem with joining")
+        else:
+            logging.info("joining success")
 
-                company_info = ""
+        company_logo = ""
 
-                try:
-                    company_info = soup.find('div', {'class': 'company-info'}).p.get_text()
-                except:
-                    logging.info("No company info")
-                else:
-                    logging.info("Info get success")
+        try:
+            company_logo = soup.find('strong', {'class': 'company-logo'}).img['src']
+        except:
+            logging.info("No company logo")
+        else:
+            logging.info("Logo get success")
 
-                try:
-                    cursor.execute("""INSERT INTO LushaCompaniesScraping(
+        company_info = ""
+
+        try:
+            company_info = soup.find('div', {'class': 'company-info'}).p.get_text()
+        except:
+            logging.info("No company info")
+        else:
+            logging.info("Info get success")
+
+        try:
+            cursor.execute("""INSERT INTO LushaCompaniesScraping(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -241,21 +272,11 @@ def run_scrape():
                                      perm_data_ex_str,
                                      perm_data_percent_str))
 
-                    cnxn.commit()
-                except:
-                    print("Insert failed.")
-                else:
-                    print("Insert successful")
-
-
-
-            except:
-                logging.info("The whole thing failed. Retrying...")
-                continue
-            else:
-                break
-            finally:
-                logging.info("Everything success")
+            cnxn.commit()
+        except:
+            print("Insert failed.")
+        else:
+            print("Insert successful")
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
