@@ -3,6 +3,7 @@ import pyodbc
 from bs4 import BeautifulSoup
 import requests
 import azure.functions as func
+import azure.durable_functions as df
 import os
 
 
@@ -24,7 +25,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScraped(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapedDurable(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -210,7 +211,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScraped(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapedDurable(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -247,25 +248,9 @@ def run_scrape():
             print("Insert successful")
 
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+def orchestrator_function(context: df.DurableOrchestrationContext):
+    result = yield context.call_activity("F1", run_scrape)
+    return result
 
-    name = req.params.get('name')
-    logging.info("Running the function...")
-    run_scrape()
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
 
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-            "This HTTP triggered function executed successfully. Pass a name in the query string or in the request "
-            "body for a personalized response.",
-            status_code=200
-        )
+main = df.Orchestrator.create(orchestrator_function)
