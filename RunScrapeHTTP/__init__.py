@@ -47,38 +47,6 @@ def run_scrape():
     else:
         logging.info("Table created.")
 
-    cursor.execute("""INSERT INTO LushaCompaniesScraping(
-                        CompanyName,
-                         CompanyInfo,
-                         CompanyUrl,
-                         CompanyLogoUrl,
-                         CompanySite,
-                         CompanyFounded, 
-                         CompanyEmployees, 
-                         CompanyLeadNames,
-                         CompanyTwitter, 
-                         CompanyLinkedIn, 
-                         CompanyFacebok, 
-                         CompanyPermutationTypes, 
-                         CompanyPermutationExamples, 
-                         CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                          ?, ?, ?) """, ("tedgdgseryhaeyhuwujhewujhyyyyyyyyyyyyyyyyyyyyyyyyyyyyyywst",
-                                         "tesetyhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhst",
-                                         "terttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttst",
-                                         "tesrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt",
-                                         "tegydfshdghsrtujhsryjsryjeryjst",
-                                         "tesryjseryjweryjwryjwryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyt",
-                                         "tewsuyjhwryjwryjuwryjst",
-                                         "teyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyst",
-                                         "teswjryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyt",
-                                         "tewjjjjjjjsgnsryjsreyjsgjsfgjssst",
-                                         "tessthsrthsryjhsdfjsryjsryjsryjt",
-                                         "tesryjryjhsryjryjhsryjnsryjnst",
-                                         "tesyjsyrjhsryjsryjst",
-                                         "tessryjsryjsryjryjt"))
-
-    cnxn.commit()
-
     current_path = "/home/site/wwwroot"
     url_file = open(os.path.join(current_path, 'url_file.txt'), 'r')
 
@@ -89,7 +57,7 @@ def run_scrape():
     lam = lambda x: "'" + x + "'"
 
     for i, url in enumerate(urls):
-        logging.info(f"Checking url {url}; {i} of {len(urls)}")
+        logging.info(f"Checking url {url} {i} of {len(urls)}")
         for j in range(20):
             try:
                 req = None
@@ -98,9 +66,16 @@ def run_scrape():
                 except:
                     logging.info("Url GET failed.")
                 else:
-                    logging.info("Url get success")
+                    logging.info(f"Url {url} get success")
 
-                soup = BeautifulSoup(req.content, 'html.parser')
+                soup = None
+
+                try:
+                    soup = BeautifulSoup(req.content, 'html.parser')
+                except:
+                    print("Problem parsing.")
+                else:
+                    print("Parsing complete.")
 
                 company_name = ""
 
@@ -235,7 +210,8 @@ def run_scrape():
                 else:
                     logging.info("Info get success")
 
-                cursor.execute("""INSERT INTO LushaCompaniesScraping(
+                try:
+                    cursor.execute("""INSERT INTO LushaCompaniesScraping(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -246,7 +222,7 @@ def run_scrape():
                      CompanyLeadNames,
                      CompanyTwitter, 
                      CompanyLinkedIn, 
-                     CompanyFacebok, 
+                     CompanyFacebook, 
                      CompanyPermutationTypes, 
                      CompanyPermutationExamples, 
                      CompanyPermutationPercentages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
@@ -265,7 +241,11 @@ def run_scrape():
                                      perm_data_ex_str,
                                      perm_data_percent_str))
 
-                cnxn.commit()
+                    cnxn.commit()
+                except:
+                    print("Insert failed.")
+                else:
+                    print("Insert successful")
 
 
 
