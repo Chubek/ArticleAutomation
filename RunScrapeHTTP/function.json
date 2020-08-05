@@ -2,12 +2,26 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "RunScrapeHTTP",
-      "type": "activityTrigger",
+      "authLevel": "anonymous",
+      "name": "req",
+      "type": "httpTrigger",
       "direction": "in",
-      "datatype": "string",
-      "authLevel": "anonymous"
+      "route": "orchestrators/{functionName}",
+      "methods": [
+        "post",
+        "get"
+      ]
+    },
+    {
+      "direction": "out",
+      "name": "message",
+      "type": "http"
+    },
+    {
+      "name": "starter",
+      "type": "orchestrationClient",
+      "direction": "in",
+      "datatype": "string"
     }
-  ],
-  "disabled": false
+  ]
 }

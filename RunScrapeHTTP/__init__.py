@@ -3,7 +3,8 @@ import pyodbc
 from bs4 import BeautifulSoup
 import requests
 import azure.functions as func
-import azure.durable_functions as df
+from azure.durable_functions import DurableOrchestrationClient
+import  azure.durable_functions as df
 import os
 
 
@@ -248,8 +249,13 @@ def run_scrape():
             logging.info("Insert successful")
 
 
-def main():
-    logging.warning("Activity Triggered")
-    logging.info("Function run started")
-    yield run_scrape()
-    logging.info("Function run ended")
+def orchestrator_function(context: df.DurableOrchestrationContext):
+    logging.info("Calling function")
+    context.call_activity("Run Scrape", run_scrape())
+    print("Done!")
+
+
+main = df.Orchestrator.create(orchestrator_function)
+
+
+
