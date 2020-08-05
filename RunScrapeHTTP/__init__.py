@@ -251,5 +251,5 @@ def run_scrape():
 def main():
     logging.warning("Activity Triggered")
     logging.info("Function run started")
-    run_scrape()
+    yield run_scrape()
     logging.info("Function run ended")

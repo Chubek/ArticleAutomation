@@ -2,10 +2,11 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "name",
+      "name": "RunScrapeHTTP",
       "type": "activityTrigger",
       "direction": "in",
-      "datatype": "string"
+      "datatype": "string",
+      "authLevel": "anonymous"
     }
   ],
   "disabled": false
