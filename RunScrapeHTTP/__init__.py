@@ -28,7 +28,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsRan(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsRaan(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -215,7 +215,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScrapingsRan(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapingsRaan(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -254,11 +254,11 @@ def run_scrape():
     return "Done"
 
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+async def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     name = "RunScrapeHTTP"
-    run_scrape()
+    await run_scrape()
     if not name:
         try:
             req_body = req.get_json()
