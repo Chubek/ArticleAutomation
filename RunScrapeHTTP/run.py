@@ -16,7 +16,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScrapings(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsRun(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -208,7 +208,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScrapings(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapingsRun(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
