@@ -10,7 +10,8 @@ import typing
 import json
 import time
 
-def run_scrape():
+
+def run_scrape(index_num):
     logging.info("Function started")
 
     driver = "{ODBC Driver 17 for SQL Server}"
@@ -28,7 +29,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsRaan(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsFinal(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -59,7 +60,7 @@ def run_scrape():
 
     lam = lambda x: "'" + x + "'"
 
-    for i, url in enumerate(urls):
+    for i, url in enumerate(urls[index_num:]):
 
         logging.info(f"Checking url {url} {i} of {len(urls)}")
 
@@ -215,7 +216,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScrapingsRaan(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapingsFinal(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -254,23 +255,13 @@ def run_scrape():
     return "Done"
 
 
-async def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+async def main(req: func.HttpRequest, starter: str, message):
+    function_name = req.route_params.get('functionName')
+    index_num = req.route_params.get("indexNum")
+    logging.info(starter)
+    client = DurableOrchestrationClient(starter)
+    instance_id = await client.start_new(function_name, client_input=run_scrape(index_num))
+    response = client.create_check_status_response(req, instance_id)
+    message.set(response)
 
-    name = "RunScrapeHTTP"
-    await run_scrape()
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+    return message
