@@ -8,7 +8,7 @@ import azure.durable_functions as df
 import os
 import typing
 import json
-
+import time
 
 def run_scrape():
     logging.info("Function started")
@@ -28,7 +28,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScrapedView(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapings(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -60,6 +60,12 @@ def run_scrape():
     lam = lambda x: "'" + x + "'"
 
     for i, url in enumerate(urls):
+
+        time.sleep(15)
+
+        if i % 10 == 0:
+            time.sleep(35)
+
         logging.info(f"Checking url {url} {i} of {len(urls)}")
 
         try:
@@ -214,7 +220,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScrapedView(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapings(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
@@ -253,7 +259,23 @@ def run_scrape():
     return "Done"
 
 
-def main(req: func.HttpRequest, starter: str, message):
-    function_name = req.route_params.get('functionName')
-    res = yield df.DurableOrchestrationContext.call_activity_with_retry(name=function_name, input_=run_scrape)
-    logging.info(res)
+def main(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+
+    name = req.params.get('name')
+    run_scrape()
+    if not name:
+        try:
+            req_body = req.get_json()
+        except ValueError:
+            pass
+        else:
+            name = req_body.get('name')
+
+    if name:
+        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+    else:
+        return func.HttpResponse(
+             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
+             status_code=200
+        )

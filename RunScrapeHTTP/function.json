@@ -2,26 +2,19 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "authLevel": "anonymous",
-      "name": "req",
+      "authLevel": "function",
       "type": "httpTrigger",
       "direction": "in",
-      "route": "orchestrators/{functionName}",
+      "name": "req",
       "methods": [
-        "post",
-        "get"
+        "get",
+        "post"
       ]
     },
     {
+      "type": "http",
       "direction": "out",
-      "name": "message",
-      "type": "http"
-    },
-    {
-      "name": "starter",
-      "type": "orchestrationClient",
-      "direction": "in",
-      "datatype": "string"
+      "name": "$return"
     }
   ]
 }
