@@ -253,7 +253,7 @@ def run_scrape():
     return "Done"
 
 
-async def main(req: func.HttpRequest, starter: str, message):
+def main(req: func.HttpRequest, starter: str, message):
     function_name = req.route_params.get('functionName')
     res = yield df.DurableOrchestrationContext.call_activity_with_retry(name=function_name, input_=run_scrape)
     logging.info(res)
