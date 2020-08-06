@@ -28,7 +28,7 @@ def run_scrape():
     logging.info("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsRun(
+        cursor.execute("""CREATE TABLE LushaCompaniesScrapingsRan(
                    CompanyName text,
                    CompanyInfo text,
                    CompanyUrl text,
@@ -60,11 +60,6 @@ def run_scrape():
     lam = lambda x: "'" + x + "'"
 
     for i, url in enumerate(urls):
-
-        time.sleep(15)
-
-        if i % 10 == 0:
-            time.sleep(35)
 
         logging.info(f"Checking url {url} {i} of {len(urls)}")
 
@@ -220,7 +215,7 @@ def run_scrape():
             logging.info("Info get success")
 
         try:
-            cursor.execute("""INSERT INTO LushaCompaniesScrapingsRun(
+            cursor.execute("""INSERT INTO LushaCompaniesScrapingsRan(
                     CompanyName,
                      CompanyInfo,
                      CompanyUrl,
