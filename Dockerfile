@@ -6,7 +6,6 @@ RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://ar
 
 RUN apt-get update
 RUN apt-get install sudo
-RUN sudo apt-get install -y apt-transport-https
 RUN sudo apt-get install unixodbc -y
 RUN sudo apt-get install unixodbc-dev -y
 RUN sudo apt-get install curl -y
