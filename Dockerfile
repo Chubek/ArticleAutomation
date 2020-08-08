@@ -2,12 +2,12 @@
 # FROM mcr.microsoft.com/azure-functions/python:3.0-python3.8-appservice
 FROM python:latest
 
-RUN apt-get update && apt-get install -y apt-transport-https \
-    && apt-get install unixodbc -y \
-    && apt-get install unixodbc-dev -y \
-    && apt-get install curl -y \
-    && apt-get install poppler-utils -y \
-    && apt-get install --reinstall build-essential -y
+RUN apt-get update && apt-get install sudo && sudo apt-get install -y apt-transport-https \
+    && sudo apt-get install unixodbc -y \
+    && sudo apt-get install unixodbc-dev -y \
+    && sudo apt-get install curl -y \
+    && sudo apt-get install poppler-utils -y \
+    && sudo apt-get install --reinstall build-essential -y
 RUN echo 'deb http://private-repo-1.hortonworks.com/HDP/ubuntu14/2.x/updates/2.4.2.0 HDP main' >> /etc/apt/sources.list.d/HDP.list
 RUN echo 'deb http://private-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/ubuntu14 HDP-UTILS main'  >> /etc/apt/sources.list.d/HDP.list
 RUN echo 'deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/azurecore/ trusty main' >> /etc/apt/sources.list.d/azure-public-trusty.list
