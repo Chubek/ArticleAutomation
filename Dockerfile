@@ -2,6 +2,8 @@
 # FROM mcr.microsoft.com/azure-functions/python:3.0-python3.8-appservice
 FROM python:latest
 
+RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+
 RUN apt-get update && apt-get install sudo && sudo apt-get install -y apt-transport-https \
     && sudo apt-get install unixodbc -y \
     && sudo apt-get install unixodbc-dev -y \
