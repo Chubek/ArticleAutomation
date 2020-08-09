@@ -28,6 +28,9 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 COPY requirements.txt /
 ADD requirements.txt /
+
+RUN true
+
 COPY data_jar_scrape.py /
 ADD data_jar_scrape.py /
 
