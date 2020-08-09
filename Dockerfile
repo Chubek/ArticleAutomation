@@ -29,7 +29,7 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 COPY . /
 ADD . /
 
-RUN sudo apt install python3-pip
+RUN sudo apt install python3-pip -y
 
 RUN pip3 install -r /requirements.txt
 
