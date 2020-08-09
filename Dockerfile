@@ -4,16 +4,15 @@ FROM python:latest
 
 RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
 
+RUN apt-get clean
 RUN apt-get update
 RUN apt-get install sudo
+RUN apt-get install -y apt-transport-https
 RUN sudo apt-get install unixodbc -y
 RUN sudo apt-get install unixodbc-dev -y
 RUN sudo apt-get install curl -y
 RUN sudo apt-get install poppler-utils -y
 RUN sudo apt-get install --reinstall build-essential -y
-RUN echo 'deb http://private-repo-1.hortonworks.com/HDP/ubuntu14/2.x/updates/2.4.2.0 HDP main' >> /etc/apt/sources.list.d/HDP.list
-RUN echo 'deb http://private-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/ubuntu14 HDP-UTILS main'  >> /etc/apt/sources.list.d/HDP.list
-RUN echo 'deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/azurecore/ trusty main' >> /etc/apt/sources.list.d/azure-public-trusty.list
 
 RUN sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN sudo curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
