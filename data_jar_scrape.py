@@ -20,7 +20,7 @@ def run_datajar_scrape():
     cnxn = pyodbc.connect(connection_string)
     cursor = cnxn.cursor()
 
-    logging.info("Connection made")
+    print("Connection made")
 
     try:
         cursor.execute("""CREATE TABLE DataJarScrape(
@@ -50,8 +50,8 @@ def run_datajar_scrape():
     for char in string.ascii_uppercase:
         alphabet[char] = char
 
-    for alpha in alphabet:
-        for i in range(0, 80):
+    for alpha in alphabet[letter_index:]:
+        for i in range(num_index, 80):
             print(f"Checking {alpha}-{i}")
 
             try:
@@ -100,7 +100,7 @@ def run_datajar_scrape():
                     employee_count = ""
                     industry = ""
                     location = ""
-                    url = ""
+                    company_url = ""
                     tech_used = ""
 
                     try:
