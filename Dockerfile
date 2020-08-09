@@ -29,6 +29,8 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 COPY . /
 ADD . /
 
-RUN pip install -r /requirements.txt
+RUN sudo apt install python3-pip
+
+RUN pip3 install -r /requirements.txt
 
 CMD [ "python", "./data_jar_scrape.py" ]
