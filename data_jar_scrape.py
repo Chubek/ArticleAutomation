@@ -46,12 +46,13 @@ def run_datajar_scrape():
     num_index = req_index.content.decode("utf-8").split(";")[1]
 
     alphabet = {}
+    uppercase_letters = string.ascii_uppercase
 
-    for char in string.ascii_uppercase:
+    for char in uppercase_letters[uppercase_letters.index(letter_index):]:
         alphabet[char] = char
 
     for alpha in alphabet[letter_index:]:
-        for i in range(num_index, 80):
+        for i in range(int(num_index), 80):
             print(f"Checking {alpha}-{i}")
 
             try:
