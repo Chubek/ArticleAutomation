@@ -51,7 +51,7 @@ def run_datajar_scrape():
     for char in uppercase_letters[uppercase_letters.index(letter_index):]:
         alphabet[char] = char
 
-    for alpha in alphabet[letter_index:]:
+    for alpha in alphabet:
         for i in range(int(num_index), 80):
             print(f"Checking {alpha}-{i}")
 
