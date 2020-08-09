@@ -14,13 +14,16 @@ RUN apt-get clean \
 && sudo apt-get install --reinstall build-essential -y
 
 
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
 RUN sudo su
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
-RUN ACCEPT_EULA=Y apt-get install msodbcsql17
-RUN ACCEPT_EULA=Y apt-get install mssql-tools
-RUN 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
-RUN 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+RUN sudo curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN sudo curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN sudo apt-get update
+RUN sudo ACCEPT_EULA=Y apt-get install msodbcsql17
+RUN sudo ACCEPT_EULA=Y apt-get install mssql-tools
+RUN sudo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+RUN sudo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
