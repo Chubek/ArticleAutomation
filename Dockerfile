@@ -22,8 +22,8 @@ RUN sudo curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/ap
 RUN sudo apt-get update
 RUN sudo ACCEPT_EULA=Y apt-get install msodbcsql17
 RUN sudo ACCEPT_EULA=Y apt-get install mssql-tools
-RUN sudo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
-RUN sudo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
