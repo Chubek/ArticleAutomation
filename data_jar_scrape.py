@@ -3,6 +3,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from bs4 import BeautifulSoup
 import string
 import pyodbc
+import time
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -23,18 +24,18 @@ def run_datajar_scrape():
     print("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE DataJarScrapeFin(
-                       CompanyTitle text,
-                       CompanyEmployeeNum text,
-                       CompanyIndustry text,
-                       CompanyLocation text,
-                       CompanyLogoUrl text,
-                       CompanySite text,
-                       CompanyTechUsed text,
-                       CompanyTopTechs text,
-                       CompanyContacts text,
-                       CompanySocial text,
-                       CompanyDataJarUrl text)""")
+        cursor.execute("""CREATE TABLE DataJarScrapeNew(
+                       CompanyTitle nvarchar(MAX),
+                       CompanyEmployeeNum nvarchar(MAX),
+                       CompanyIndustry nvarchar(MAX),
+                       CompanyLocation nvarchar(MAX),
+                       CompanyLogoUrl nvarchar(MAX),
+                       CompanySite nvarchar(MAX),
+                       CompanyTechUsed nvarchar(MAX),
+                       CompanyTopTechs nvarchar(MAX),
+                       CompanyContacts nvarchar(MAX),
+                       CompanySocial nvarchar(MAX),
+                       CompanyDataJarUrl nvarchar(MAX))""")
         cnxn.commit()
     except:
         print("Table already exists.")
@@ -54,7 +55,12 @@ def run_datajar_scrape():
         alphabet[char] = char
 
     for alpha in alphabet:
-        for i in range(int(num_index), 80):
+        time.sleep(10)
+        for i in range(int(num_index), 430):
+
+            if i % 2 == 1:
+                alpha = alpha.lower()
+
             print(f"Checking {alpha}-{i}")
 
             try:
@@ -172,7 +178,7 @@ def run_datajar_scrape():
                           f"contacts: {', '.join([': '.join(contact_name) for contact_name in contact_names])}")
 
                     try:
-                        cursor.execute("""INSERT INTO DataJarScrapeFin(
+                        cursor.execute("""INSERT INTO DataJarScrapeNew(
                        CompanyTitle,
                        CompanyEmployeeNum,
                        CompanyIndustry,
@@ -205,6 +211,7 @@ def run_datajar_scrape():
                         print("Insert failed.")
                     else:
                         print("Insert successful")
+        time.sleep(10)
 
 
 if __name__ == "__main__":
