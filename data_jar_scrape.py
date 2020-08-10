@@ -23,7 +23,7 @@ def run_datajar_scrape():
     print("Connection made")
 
     try:
-        cursor.execute("""CREATE TABLE DataJarScrape(
+        cursor.execute("""CREATE TABLE DataJarScrapeFin(
                        CompanyTitle text,
                        CompanyEmployeeNum text,
                        CompanyIndustry text,
@@ -32,7 +32,9 @@ def run_datajar_scrape():
                        CompanySite text,
                        CompanyTechUsed text,
                        CompanyTopTechs text,
-                       CompanyContacts text)""")
+                       CompanyContacts text,
+                       CompanySocial text,
+                       CompanyDataJarUrl text)""")
         cnxn.commit()
     except:
         print("Table already exists.")
@@ -96,7 +98,7 @@ def run_datajar_scrape():
                     company_info = soup_url.find('div', {'class': 'people_detail_body'})
 
                     img = ""
-                    title = ""
+                    company_title = ""
                     ps = None
                     employee_count = ""
                     industry = ""
@@ -106,7 +108,7 @@ def run_datajar_scrape():
 
                     try:
                         img = soup_url.find('img', {'class': 'profile_pic'})['src']
-                        title = company_info.h6.get_text()
+                        company_title = company_info.h6.get_text()
                         ps = company_info.find_all('p')
                         employee_count = ps[0].get_text()
                         industry = ps[1].get_text()
@@ -117,6 +119,21 @@ def run_datajar_scrape():
                         print("Some info scrape failed")
 
                     tech_p = []
+
+                    social_str = ""
+
+                    try:
+
+                        socials_div = soup_url.find('div', {'class': 'social_icons'})
+
+                        social_as = socials_div.find_all('a')
+
+                        social = [a['href'] for a in social_as]
+
+                        social_str = ", ".join(social)
+
+                    except:
+                        print("No social URLs")
 
                     try:
                         company_top_techs = soup_url.find('div', {'class': 'company_info_container'})
@@ -147,7 +164,7 @@ def run_datajar_scrape():
                     except:
                         print("Contacts not found.")
 
-                    print(f"Image: {img}, title: {title},"
+                    print(f"Image: {img}, title: {company_title},"
                           f" employee_count: {employee_count}, "
                           f"industry: {industry}, "
                           f"location: {location}, url: {company_url}, "
@@ -155,7 +172,7 @@ def run_datajar_scrape():
                           f"contacts: {', '.join([': '.join(contact_name) for contact_name in contact_names])}")
 
                     try:
-                        cursor.execute("""INSERT INTO DataJarScrape(
+                        cursor.execute("""INSERT INTO DataJarScrapeFin(
                        CompanyTitle,
                        CompanyEmployeeNum,
                        CompanyIndustry,
@@ -164,18 +181,24 @@ def run_datajar_scrape():
                        CompanySite,
                        CompanyTechUsed,
                        CompanyTopTechs,
-                       CompanyContacts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) """, (title,
-                                                                                 employee_count,
-                                                                                 industry,
-                                                                                 location,
-                                                                                 img,
-                                                                                 company_url,
-                                                                                 tech_used,
-                                                                                 ','.join(tech_p),
-                                                                                 ', '.join([': '.join(contact_name) for
-                                                                                            contact_name in
-                                                                                            contact_names])
-                                                                                 ))
+                       CompanyContacts,
+                       CompanySocial,
+                       CompanyDataJarUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) """, (company_title,
+                                                                                         employee_count,
+                                                                                         industry,
+                                                                                         location,
+                                                                                         img,
+                                                                                         company_url,
+                                                                                         tech_used,
+                                                                                         ','.join(tech_p),
+                                                                                         ', '.join(
+                                                                                             [': '.join(contact_name)
+                                                                                              for
+                                                                                              contact_name in
+                                                                                              contact_names]),
+                                                                                         social_str,
+                                                                                         "https://datajar.io" + url
+                                                                                         ))
 
                         cnxn.commit()
                     except:
