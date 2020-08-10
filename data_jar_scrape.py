@@ -44,9 +44,11 @@ def run_datajar_scrape():
 
     index_url = "https://drive.google.com/uc?export=download&id=11RPDXkQvY7WT-COVtaOEj-DDVoVe5vU_"
 
-    req_index = requests.get(index_url)
-    letter_index = req_index.content.decode("utf-8").split(";")[0]
-    num_index = req_index.content.decode("utf-8").split(";")[1]
+    last_index = open("last_index.txt", "w")
+
+    req_index = last_index.readlines()[-1]
+    letter_index = req_index.split(";")[0]
+    num_index = req_index.split(";")[1]
 
     alphabet = {}
     uppercase_letters = string.ascii_uppercase
@@ -57,7 +59,7 @@ def run_datajar_scrape():
     for alpha in alphabet:
         time.sleep(10)
         for i in range(int(num_index), 430):
-
+            last_index.write(f"{alpha};{i}\n")
             if i % 2 == 1:
                 alpha = alpha.lower()
 

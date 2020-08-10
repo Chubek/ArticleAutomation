@@ -34,6 +34,13 @@ RUN true
 COPY data_jar_scrape.py /
 ADD data_jar_scrape.py /
 
+
+RUN true
+
+COPY last_index.txt /
+ADD last_index.txt /
+
+
 RUN sudo apt install python3-pip -y
 
 RUN pip3 install -r /requirements.txt
