@@ -44,7 +44,7 @@ def run_datajar_scrape():
 
     index_url = "https://drive.google.com/uc?export=download&id=11RPDXkQvY7WT-COVtaOEj-DDVoVe5vU_"
 
-    last_index = open("last_index.txt", "w")
+    last_index = open("last_index.txt", "r+")
 
     req_index = last_index.readlines()[-1].strip()
     letter_index = req_index.split(";")[0]
@@ -59,7 +59,7 @@ def run_datajar_scrape():
     for alpha in alphabet:
         time.sleep(10)
         for i in range(int(num_index), 430):
-            last_index.write(f"{alpha};{i}\n")
+            last_index.write(f"\n{alpha};{i}")
             if i % 2 == 1:
                 alpha = alpha.lower()
 
