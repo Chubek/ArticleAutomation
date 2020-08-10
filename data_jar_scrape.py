@@ -46,7 +46,7 @@ def run_datajar_scrape():
 
     last_index = open("last_index.txt", "w")
 
-    req_index = last_index.readlines()[-1]
+    req_index = last_index.readlines()[-1].strip()
     letter_index = req_index.split(";")[0]
     num_index = req_index.split(";")[1]
 
