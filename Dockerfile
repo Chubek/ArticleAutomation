@@ -30,6 +30,8 @@ COPY . /
 ADD . /
 
 
+RUN sudo apt-get install python3-lxml -y
+
 RUN sudo apt install python3-pip -y
 
 RUN pip3 install -r /requirements.txt
