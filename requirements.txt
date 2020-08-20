@@ -5,4 +5,4 @@ pyodbc~=4.0.30
 selenium~=3.141.0
 pandas~=1.0.5
 numpy~=1.19.1
-lxml~=3.4.2
+lxml~=4.5.2
