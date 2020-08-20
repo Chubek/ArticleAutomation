@@ -3,6 +3,10 @@
 FROM python:latest
 FROM ubuntu:latest
 
+ENV TZ=Europe/Minsk
+
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get clean \
 && apt-get update \
 && apt-get install sudo -y \
