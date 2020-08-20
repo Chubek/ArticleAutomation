@@ -3,8 +3,8 @@
 FROM python:latest
 FROM ubuntu:latest
 
-ENV TZ=Europe/Minsk
-
+ENV TZ=America/Los_Angeles
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get clean \
@@ -34,7 +34,7 @@ COPY . /
 ADD . /
 
 
-RUN sudo apt-get install python3-lxml -y
+RUN sudo apt-get install python3-lxml -yqq
 
 RUN sudo apt install python3-pip -y
 
