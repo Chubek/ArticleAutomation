@@ -26,8 +26,8 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 
-COPY requirements.txt /
-ADD requirements.txt /
+COPY ThomasNet/requirements.txt /
+ADD ThomasNet/requirements.txt /
 
 RUN true
 

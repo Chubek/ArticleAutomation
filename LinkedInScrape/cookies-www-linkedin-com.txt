@@ -1,0 +1,12 @@
+.www.linkedin.com	TRUE	/	TRUE	1660641499	bscookie	"v=1&20200815214047bd3229b9-46ef-42fb-8c3f-bae3ea7c3206AQHjrrKyav6VH34SCHlsev3Py2xN-68s"
+www.linkedin.com	FALSE	/	TRUE	1660682083	visit	v=1&M
+www.linkedin.com	FALSE	/voyager/api	FALSE	1597610088	trkCode	ripf
+www.linkedin.com	FALSE	/voyager/api	FALSE	1597610088	trkInfo	AQFaXq8p3ydnXQAAAXP4-0K4sRooN7umbvwcQon9wPFMBY4vQffIb9JXlNoeijq7UT8HlSyh3Xfc5IXWaB_fALWcz52X0pl3jjmZrIwX1uvnjetWEH87-CF4KkyRpKK-iHJJ8n4=
+www.linkedin.com	FALSE	/	FALSE	1613162154	g_state	{"i_p":1597617354563,"i_l":1}
+www.linkedin.com	FALSE	/voyager/api/feed	FALSE	1597656366	trkCode	ripf
+www.linkedin.com	FALSE	/voyager/api/feed	FALSE	1597656366	trkInfo	AQF-20tosbuu2gAAAXP7vWgomghYRGXPMRKPzQZ4crEjfxWsC-Uh-0io8k-L4mSKJWlcJgKujPR9pbdF0Cm0ct7AnQtivoJek9BE9ptuXxzufKavNLyBQP-qJrc76jwzEEyrcjY=
+.www.linkedin.com	TRUE	/	FALSE	253402257600	G_ENABLED_IDPS	google
+.www.linkedin.com	TRUE	/	TRUE	1629266083	li_rm	AQFpZb4FTFpGSAAAAXP0EYs-l4LCZc2wHfJvONGKYUVl1n0jV-vp2iVPMbAataMFswwg1kD9TiPBQS9QhjdeVkqzK4fSJX23fcv8xFPZWp5caBFWq6nj1k0X
+.www.linkedin.com	TRUE	/	TRUE	1629266083	li_at	AQEDARPxR_wBYmMtAAABdAAiUIgAAAF0JC7UiE0AzUBorwSbVv8wIeo0-0OAy9kPEvZX2FzxscVjpUeOn5IggF-s_cJok3zLl4U4YC6KTIYU3CiR_sfzApZGN9k0S_-qtVTx-WP2tjhdUFaat-f1FWad
+.www.linkedin.com	TRUE	/	TRUE	1605506083	JSESSIONID	"ajax:7500504589413919533"
+.www.linkedin.com	TRUE	/	TRUE	1600322088	UserMatchHistory	AQI5r1C54BMlQwAAAXQAIl0gKF08O9ZZZA2P6Y8miOd-GmW6RL4DSRUpIvAiRgAnnQNq5orC2O4cuRPH_zpDAh-NCzvLOFOdCdtLNw7wAy9lnVTRnboG_4HaIs7uL9xOIIEKwmz6hM0zVPi-AojrTM3t2jY2M2A464L216HqH-i-CdT2eAbd_MYYdwVE_kG_hqcRDnD5J_eS7HrIjD4ESOJp5HFGzMvktXgLLuuPlep72VASKjs_kdWP7BgozTlC5h0E6FI
